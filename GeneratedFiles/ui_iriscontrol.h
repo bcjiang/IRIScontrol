@@ -14,6 +14,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QHeaderView>
+#include <QtGui/QLineEdit>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenuBar>
 #include <QtGui/QPushButton>
@@ -28,6 +29,7 @@ class Ui_IRIScontrolClass
 public:
     QWidget *centralWidget;
     QPushButton *testButton;
+    QLineEdit *lineEdit;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -42,10 +44,13 @@ public:
         testButton = new QPushButton(centralWidget);
         testButton->setObjectName(QString::fromUtf8("testButton"));
         testButton->setGeometry(QRect(80, 90, 121, 61));
+        lineEdit = new QLineEdit(centralWidget);
+        lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
+        lineEdit->setGeometry(QRect(240, 110, 113, 33));
         IRIScontrolClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(IRIScontrolClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 444, 21));
+        menuBar->setGeometry(QRect(0, 0, 444, 38));
         IRIScontrolClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(IRIScontrolClass);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -55,6 +60,7 @@ public:
         IRIScontrolClass->setStatusBar(statusBar);
 
         retranslateUi(IRIScontrolClass);
+        QObject::connect(testButton, SIGNAL(clicked()), lineEdit, SLOT(clear()));
 
         QMetaObject::connectSlotsByName(IRIScontrolClass);
     } // setupUi
