@@ -76,7 +76,7 @@
      <string>Target Position</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="eTargetPosition">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -110,6 +110,9 @@
     </property>
     <property name="text">
      <string>Relative</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QRadioButton" name="rBtnAbsolute">
@@ -194,7 +197,7 @@
      <x>0</x>
      <y>0</y>
      <width>1053</width>
-     <height>38</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

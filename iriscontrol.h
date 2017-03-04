@@ -5,6 +5,7 @@
 #include "ui_iriscontrol.h"
 #include <windows.h>
 #include "Definitions.h"
+#include <atlstr.h>
 
 class IRIScontrol : public QMainWindow
 {
@@ -17,8 +18,13 @@ public:
 	long    m_lActualValue;
 	long    m_lStartPosition;
 	long    m_lTargetPosition;
+	CString m_strNodeId;
+	int     m_oRadio;
 
 	BOOL OpenDevice();
+	BOOL UpdateStatus();
+	
+	void UpdateNodeIdString();
 
 private:
 	Ui::IRIScontrolClass ui;
@@ -37,6 +43,12 @@ private:
 
 public slots:
 	void doSomething();
+	void OnButtonEnable();
+	void OnButtonMove();
+	void OnRadioRelative();
+	void OnRadioAbsolute();
+	void UpdateTargetPositionText(QString text);
+
 };
 
 #endif // IRISCONTROL_H

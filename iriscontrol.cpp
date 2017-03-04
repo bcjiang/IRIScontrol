@@ -2,10 +2,17 @@
 
 IRIScontrol::IRIScontrol(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags)
+	, m_strNodeId(_T("1"))
+	, m_oRadio(0)
+	, m_lStartPosition(0)
+	, m_lTargetPosition(2000)
 {
 	ui.setupUi(this);
 
 	connect(ui.testButton,SIGNAL(clicked()),this,SLOT(doSomething()));
+	connect(ui.pBtnEnable,SIGNAL(clicked()),this,SLOT(OnButtonEnable()));
+	connect(ui.eTargetPosition,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText(QString)));
+	connect(ui.pBtnMove,SIGNAL(clicked()),this,SLOT(OnButtonMove()));
 }
 
 IRIScontrol::~IRIScontrol()
@@ -60,4 +67,206 @@ BOOL IRIScontrol::OpenDevice()
 		MessageBox(NULL,(LPCWSTR)L"Test Message",(LPCWSTR)L"Test Message Window",MB_CANCELTRYCONTINUE);
 	}
 	return FALSE;
+}
+
+BOOL IRIScontrol::ShowErrorInformation(DWORD p_ulErrorCode)
+{
+    char* pStrErrorInfo;
+    CString strDescription;
+
+    if((pStrErrorInfo = (char*)malloc(100)) == NULL)
+    {
+        MessageBox(NULL,(LPCWSTR)L"Not enough memory to allocate buffer for error information string\n",(LPCWSTR)L"System Error",MB_OK);
+
+        return FALSE;
+    }
+
+    if(VCS_GetErrorInfo(p_ulErrorCode, pStrErrorInfo, 100))
+    {
+        strDescription = pStrErrorInfo;
+		MessageBox(NULL,(LPCWSTR)strDescription,(LPCWSTR)L"System Error",MB_OK);
+        //AfxMessageBox(strDescription, MB_ICONINFORMATION);
+
+        free(pStrErrorInfo);
+
+        return TRUE;
+    }
+    else
+    {
+        free(pStrErrorInfo);
+		MessageBox(NULL,(LPCWSTR)L"Error information can't be read!",(LPCWSTR)L"System Error",MB_OK);
+
+        return FALSE;
+    }
+}
+
+void IRIScontrol::OnButtonEnable()
+{
+	BOOL oFault = FALSE;
+
+    UpdateNodeIdString();
+
+    if(!VCS_GetFaultState(m_KeyHandle, m_usNodeId, &oFault, &m_ulErrorCode))
+    {
+        ShowErrorInformation(m_ulErrorCode);
+        return;
+    }
+
+    if(oFault)
+    {
+        if(!VCS_ClearFault(m_KeyHandle, m_usNodeId, &m_ulErrorCode))
+        {
+            ShowErrorInformation(m_ulErrorCode);
+            return;
+        }
+    }
+
+    if(!VCS_SetEnableState(m_KeyHandle, m_usNodeId, &m_ulErrorCode))
+    {
+        ShowErrorInformation(m_ulErrorCode);
+    }
+}
+
+void IRIScontrol::UpdateNodeIdString()
+{
+    const size_t size(3);
+
+    char strNodeId[size];
+
+    _itoa(m_usNodeId, strNodeId, 10);
+    m_strNodeId = strNodeId;
+}
+
+void IRIScontrol::OnButtonMove()  
+{
+    UpdateNodeIdString();
+
+    if(VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lStartPosition, &m_ulErrorCode))
+    {
+        if(!VCS_MoveToPosition(m_KeyHandle, m_usNodeId, m_lTargetPosition, m_oRadio, m_oImmediately, &m_ulErrorCode))
+        {
+            ShowErrorInformation(m_ulErrorCode);
+        }
+    }
+
+    UpdateStatus();
+}
+
+void IRIScontrol::OnRadioRelative()
+{
+	m_oRadio = 0;
+}
+
+void IRIScontrol::OnRadioAbsolute()
+{
+	m_oRadio = 1;
+}
+
+BOOL IRIScontrol::UpdateStatus()
+{
+    //BOOL oEnable = TRUE;
+    //BOOL oResult = m_oUpdateActive;
+
+    //if(m_oRadio == 0)
+    //{
+    //    m_Move.SetWindowText("&Move Relative");
+    //}
+    //else
+    //{
+    //    m_Move.SetWindowText("&Move Absolute");
+    //}
+
+    //if(oResult)
+    //{
+    //    oResult = VCS_GetOperationMode(m_KeyHandle, m_usNodeId, &m_bMode, &m_ulErrorCode);
+    //    if(oResult)
+    //    {
+    //        switch(m_bMode)
+    //        {
+    //            case -6: m_strActiveMode = "Step/Direction Mode"; break;
+    //            case -5: m_strActiveMode = "Master Encoder Mode"; break;
+    //            case -3: m_strActiveMode = "Current Mode"; break;
+    //            case -2: m_strActiveMode = "Velocity Mode"; break;
+    //            case -1: m_strActiveMode = "Position Mode"; break;
+    //            case 1: m_strActiveMode = "Profile Position Mode"; break;
+    //            case 3: m_strActiveMode = "Profile Velocity Mode"; break;
+    //            case 6: m_strActiveMode = "Homing Mode"; break;
+    //            case 7: m_strActiveMode = "Interpolated Position Mode"; break;
+    //            default: m_strActiveMode = "Unknown Mode";
+    //        }
+    //    }
+    //    else
+    //    {
+    //        StopTimer();
+    //        ShowErrorInformation(m_ulErrorCode);
+
+    //        m_strActiveMode = "Unknown Mode";
+    //    }
+    //}
+    //else
+    //{
+    //    m_strActiveMode = "Unknown Mode";
+    //}
+
+    //if(oResult)
+    //{
+    //    oResult = VCS_GetEnableState(m_KeyHandle, m_usNodeId, &oEnable, &m_ulErrorCode);
+
+    //    if(oResult)
+    //    {
+    //        m_DeviceSettings.EnableWindow(!oEnable);
+    //        m_Enable.EnableWindow(!oEnable);
+    //        m_Disable.EnableWindow(oEnable);
+    //        m_Move.EnableWindow(oEnable);
+    //        m_Halt.EnableWindow(oEnable);
+    //    }
+    //    else
+    //    {
+    //        StopTimer();
+    //        ShowErrorInformation(m_ulErrorCode);
+
+    //        m_DeviceSettings.EnableWindow(oEnable);
+    //        m_Enable.EnableWindow(oEnable);
+    //        m_Disable.EnableWindow(!oEnable);
+    //        m_Move.EnableWindow(!oEnable);
+    //        m_Halt.EnableWindow(!oEnable);
+    //    }
+    //}
+    //else
+    //{
+    //    m_DeviceSettings.EnableWindow(oEnable);
+    //    m_Enable.EnableWindow(!oEnable);
+    //    m_Disable.EnableWindow(!oEnable);
+    //    m_Move.EnableWindow(!oEnable);
+    //    m_Halt.EnableWindow(!oEnable);
+    //}
+
+    //if(oResult)
+    //{
+    //    oResult = VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lActualValue, &m_ulErrorCode); //update  m_lActualValue; sjz
+    //
+    //    if(!oResult)
+    //    {
+    //        StopTimer();
+    //        ShowErrorInformation(m_ulErrorCode);
+
+    //        m_lActualValue = 0;
+    //        m_lStartPosition = 0;
+    //    }
+    //}
+    //else
+    //{
+    //    m_lActualValue = 0;
+    //    m_lStartPosition = 0;
+    //}
+
+    //if(m_hWnd) UpdateData(false);
+
+    //return oResult;	
+	return TRUE;
+}
+
+void IRIScontrol::UpdateTargetPositionText(QString text)
+{
+	m_lTargetPosition = text.toLong();
 }
