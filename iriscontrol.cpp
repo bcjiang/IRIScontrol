@@ -15,7 +15,7 @@ IRIScontrol::~IRIScontrol()
 
 void IRIScontrol::doSomething()
 {
-	MessageBox(NULL,(LPCWSTR)L"Test Message",(LPCWSTR)L"Test Message Window",MB_CANCELTRYCONTINUE);
+	MessageBox(NULL,(LPCWSTR)L"Test Message",(LPCWSTR)L"Test Message Window",MB_OK);
 	//MessageBox::Show("Hello!");
 }
 
