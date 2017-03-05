@@ -42,6 +42,7 @@ private:
 	BOOL ShowErrorInformation(DWORD p_ulErrorCode);
 
 public slots:
+	void doSomething();
 	void OnButtonEnable();
 	void OnButtonMove();
 	void OnRadioRelative();

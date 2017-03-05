@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>735</width>
+    <width>1053</width>
     <height>594</height>
    </rect>
   </property>
@@ -14,6 +14,29 @@
    <string>IRIScontrol</string>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <widget class="QPushButton" name="testButton">
+    <property name="geometry">
+     <rect>
+      <x>870</x>
+      <y>40</y>
+      <width>121</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Click to test!</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>870</x>
+      <y>120</y>
+      <width>113</width>
+      <height>33</height>
+     </rect>
+    </property>
+   </widget>
    <widget class="QPushButton" name="pBtnEnable">
     <property name="geometry">
      <rect>
@@ -173,7 +196,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>735</width>
+     <width>1053</width>
      <height>21</height>
     </rect>
    </property>
@@ -191,5 +214,22 @@
  <resources>
   <include location="iriscontrol.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>testButton</sender>
+   <signal>clicked()</signal>
+   <receiver>lineEdit</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>186</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>289</x>
+     <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

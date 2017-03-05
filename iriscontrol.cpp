@@ -9,6 +9,7 @@ IRIScontrol::IRIScontrol(QWidget *parent, Qt::WFlags flags)
 {
 	ui.setupUi(this);
 
+	connect(ui.testButton,SIGNAL(clicked()),this,SLOT(doSomething()));
 	connect(ui.pBtnEnable,SIGNAL(clicked()),this,SLOT(OnButtonEnable()));
 	connect(ui.eTargetPosition,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText(QString)));
 	connect(ui.pBtnMove,SIGNAL(clicked()),this,SLOT(OnButtonMove()));
@@ -17,6 +18,12 @@ IRIScontrol::IRIScontrol(QWidget *parent, Qt::WFlags flags)
 IRIScontrol::~IRIScontrol()
 {
 
+}
+
+void IRIScontrol::doSomething()
+{
+	MessageBox(NULL,(LPCWSTR)L"Test Message",(LPCWSTR)L"Test Message Window",MB_OK);
+	//MessageBox::Show("Hello!");
 }
 
 BOOL IRIScontrol::OpenDevice()
