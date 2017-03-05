@@ -222,14 +222,33 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>166</x>
-     <y>186</y>
+     <x>870</x>
+     <y>133</y>
     </hint>
     <hint type="destinationlabel">
-     <x>289</x>
-     <y>183</y>
+     <x>870</x>
+     <y>185</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rBtnRelative</sender>
+   <signal>clicked()</signal>
+   <receiver>IRIScontrolClass</receiver>
+   <slot>selectRelative()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>315</x>
+     <y>198</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>497</x>
+     <y>273</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>selectRelative()</slot>
+ </slots>
 </ui>
