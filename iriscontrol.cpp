@@ -125,7 +125,7 @@ void IRIScontrol::OnButtonEnable()
     }
 
 	MessageBox(NULL,(LPCWSTR)L"Successfully enabled!",(LPCWSTR)L"System Message",MB_OK);
-	
+	ui.pBtnDisable->setEnabled(TRUE);
 	timer->start(100);
 	m_oUpdateActive = TRUE;
 }
