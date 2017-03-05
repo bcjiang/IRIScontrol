@@ -8,24 +8,19 @@ IRIScontrol::IRIScontrol(QWidget *parent, Qt::WFlags flags)
 	, m_lTargetPosition(2000)
 {
 	ui.setupUi(this);
-
-	connect(ui.testButton,SIGNAL(clicked()),this,SLOT(doSomething()));
 	connect(ui.pBtnEnable,SIGNAL(clicked()),this,SLOT(OnButtonEnable()));
 	connect(ui.eTargetPosition,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText(QString)));
 	connect(ui.pBtnMove,SIGNAL(clicked()),this,SLOT(OnButtonMove()));
 	connect(ui.rBtnRelative,SIGNAL(clicked()),this,SLOT(OnRadioRelative()));
 	connect(ui.rBtnAbsolute,SIGNAL(clicked()),this,SLOT(OnRadioAbsolute()));
+	timer = new QTimer(this);
+	connect(timer,SIGNAL(timeout()),this,SLOT(UpdateStatus()));
+	
 }
 
 IRIScontrol::~IRIScontrol()
 {
 
-}
-
-void IRIScontrol::doSomething()
-{
-	MessageBox(NULL,(LPCWSTR)L"Test Message",(LPCWSTR)L"Test Message Window",MB_OK);
-	//MessageBox::Show("Hello!");
 }
 
 BOOL IRIScontrol::OpenDevice()
@@ -59,6 +54,7 @@ BOOL IRIScontrol::OpenDevice()
 							//Read Actual Position
 							if(VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lStartPosition, &m_ulErrorCode))
 							{
+
 								return TRUE;
 							}
 						}
@@ -127,6 +123,11 @@ void IRIScontrol::OnButtonEnable()
     {
         ShowErrorInformation(m_ulErrorCode);
     }
+
+	MessageBox(NULL,(LPCWSTR)L"Successfully enabled!",(LPCWSTR)L"System Message",MB_OK);
+	
+	timer->start(100);
+	m_oUpdateActive = TRUE;
 }
 
 void IRIScontrol::UpdateNodeIdString()
@@ -166,8 +167,8 @@ void IRIScontrol::OnRadioAbsolute()
 
 BOOL IRIScontrol::UpdateStatus()
 {
-    //BOOL oEnable = TRUE;
-    //BOOL oResult = m_oUpdateActive;
+    BOOL oEnable = TRUE;
+    BOOL oResult = m_oUpdateActive;
 
     //if(m_oRadio == 0)
     //{
@@ -243,28 +244,30 @@ BOOL IRIScontrol::UpdateStatus()
     //    m_Halt.EnableWindow(!oEnable);
     //}
 
-    //if(oResult)
-    //{
-    //    oResult = VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lActualValue, &m_ulErrorCode); //update  m_lActualValue; sjz
-    //
-    //    if(!oResult)
-    //    {
-    //        StopTimer();
-    //        ShowErrorInformation(m_ulErrorCode);
+	// Update the Current Position
+    if(oResult)
+    {
+        oResult = VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lActualValue, &m_ulErrorCode); 
+		ui.eTruePosition->setText(QString::number(m_lActualValue));
+        if(!oResult)
+        {
+			timer->stop();
+            ShowErrorInformation(m_ulErrorCode);
 
-    //        m_lActualValue = 0;
-    //        m_lStartPosition = 0;
-    //    }
-    //}
-    //else
-    //{
-    //    m_lActualValue = 0;
-    //    m_lStartPosition = 0;
-    //}
+            m_lActualValue = 0;
+            m_lStartPosition = 0;
+        }
+    }
+    else
+    {
+        m_lActualValue = 0;
+        m_lStartPosition = 0;
+    }
 
     //if(m_hWnd) UpdateData(false);
 
     //return oResult;	
+	//MessageBox(NULL,(LPCWSTR)L"UpdateStatus() called",(LPCWSTR)L"System Message",MB_OK);
 	return TRUE;
 }
 

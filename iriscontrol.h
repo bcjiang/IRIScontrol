@@ -6,6 +6,7 @@
 #include <windows.h>
 #include "Definitions.h"
 #include <atlstr.h>
+#include <QTimer>
 
 class IRIScontrol : public QMainWindow
 {
@@ -20,10 +21,10 @@ public:
 	long    m_lTargetPosition;
 	CString m_strNodeId;
 	int     m_oRadio;
+	QTimer *timer;
 
 	BOOL OpenDevice();
-	BOOL UpdateStatus();
-	
+
 	void UpdateNodeIdString();
 
 private:
@@ -42,13 +43,14 @@ private:
 	BOOL ShowErrorInformation(DWORD p_ulErrorCode);
 
 public slots:
-	void doSomething();
 	void OnButtonEnable();
 	void OnButtonMove();
 	void OnRadioRelative();
 	void OnRadioAbsolute();
 	void UpdateTargetPositionText(QString text);
+	BOOL UpdateStatus();
 
 };
+
 
 #endif // IRISCONTROL_H
