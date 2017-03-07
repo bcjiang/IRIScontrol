@@ -181,16 +181,6 @@ background: white;
      <string>qc</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="eTargetPosition2">
-    <property name="geometry">
-     <rect>
-      <x>280</x>
-      <y>140</y>
-      <width>111</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
@@ -202,58 +192,6 @@ background: white;
     </property>
     <property name="text">
      <string>Node1</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>230</x>
-      <y>150</y>
-      <width>46</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Node2</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_7">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>140</y>
-      <width>71</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>qc</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="eTruePosition2">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>300</y>
-      <width>113</width>
-      <height>33</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_8">
-    <property name="geometry">
-     <rect>
-      <x>440</x>
-      <y>300</y>
-      <width>21</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>qc</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_9">
@@ -269,17 +207,24 @@ background: white;
      <string>Node1</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_10">
+   <widget class="QLineEdit" name="eTargetPosition2">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>340</y>
-      <width>46</width>
-      <height>13</height>
+      <x>280</x>
+      <y>140</y>
+      <width>111</width>
+      <height>31</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Node2</string>
+   </widget>
+   <widget class="QLineEdit" name="eTruePosition2">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>300</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
     </property>
    </widget>
   </widget>
