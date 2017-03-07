@@ -5,11 +5,15 @@ IRIScontrol::IRIScontrol(QWidget *parent, Qt::WFlags flags)
 	, m_strNodeId(_T("1"))
 	, m_oRadio(0)
 	, m_lStartPosition(0)
+	, m_lStartPosition2(0)
 	, m_lTargetPosition(2000)
+	, m_lTargetPosition2(2000)
 {
 	ui.setupUi(this);
 	connect(ui.pBtnEnable,SIGNAL(clicked()),this,SLOT(OnButtonEnable()));
+	connect(ui.pBtnDisable,SIGNAL(clicked()),this,SLOT(OnButtonDisable()));
 	connect(ui.eTargetPosition,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText(QString)));
+	connect(ui.eTargetPosition2,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText2(QString)));
 	connect(ui.pBtnMove,SIGNAL(clicked()),this,SLOT(OnButtonMove()));
 	connect(ui.rBtnRelative,SIGNAL(clicked()),this,SLOT(OnRadioRelative()));
 	connect(ui.rBtnAbsolute,SIGNAL(clicked()),this,SLOT(OnRadioAbsolute()));
@@ -28,6 +32,9 @@ BOOL IRIScontrol::OpenDevice()
 	m_oImmediately = TRUE;
 	m_oUpdateActive = FALSE;
 	m_usNodeId = 1;
+	m_usNodeId2 = 2;
+	m_usNodeId3 = 3;
+	m_usNodeId4 = 4;
 
 	HANDLE hNewKeyHandle;
 
@@ -37,22 +44,31 @@ BOOL IRIScontrol::OpenDevice()
 		m_KeyHandle = hNewKeyHandle;
 
 		//Clear Error History
-		if(VCS_ClearFault(m_KeyHandle, m_usNodeId, &m_ulErrorCode))
+		if(VCS_ClearFault(m_KeyHandle, m_usNodeId, &m_ulErrorCode)
+			&& VCS_ClearFault(m_KeyHandle, m_usNodeId2, &m_ulErrorCode))
 		{
 			//Read Operation Mode
-			if(VCS_GetOperationMode(m_KeyHandle, m_usNodeId, &m_bMode, &m_ulErrorCode))
+			if(VCS_GetOperationMode(m_KeyHandle, m_usNodeId, &m_bMode, &m_ulErrorCode)
+				&& VCS_GetOperationMode(m_KeyHandle, m_usNodeId2, &m_bMode, &m_ulErrorCode))
 			{
 				//Read Position Profile Objects
-				if(VCS_GetPositionProfile(m_KeyHandle, m_usNodeId, &m_ulProfileVelocity, &m_ulProfileAcceleration, &m_ulProfileDeceleration, &m_ulErrorCode))
+				if(VCS_GetPositionProfile(m_KeyHandle, m_usNodeId, &m_ulProfileVelocity, &m_ulProfileAcceleration, &m_ulProfileDeceleration, &m_ulErrorCode)
+					&& VCS_GetPositionProfile(m_KeyHandle, m_usNodeId2, &m_ulProfileVelocity, &m_ulProfileAcceleration, &m_ulProfileDeceleration, &m_ulErrorCode))
 				{
 					//Write Profile Position Mode
-					if(VCS_SetOperationMode(m_KeyHandle, m_usNodeId, OMD_PROFILE_POSITION_MODE, &m_ulErrorCode))
+					if(VCS_SetOperationMode(m_KeyHandle, m_usNodeId, OMD_PROFILE_POSITION_MODE, &m_ulErrorCode)
+						&& VCS_SetOperationMode(m_KeyHandle, m_usNodeId2, OMD_PROFILE_POSITION_MODE, &m_ulErrorCode))
 					{
 						//Write Profile Position Objects
-						if(VCS_SetPositionProfile(m_KeyHandle, m_usNodeId, 100, 1000, 1000, &m_ulErrorCode))
+						BOOL Done1, Done2;
+						Done1 = VCS_SetPositionProfile(m_KeyHandle, m_usNodeId, 100, 1000, 1000, &m_ulErrorCode);
+						Done2 = VCS_SetPositionProfile(m_KeyHandle, m_usNodeId2, 100, 1000, 1000, &m_ulErrorCode);
+						if( Done1
+							&& Done2)
 						{
 							//Read Actual Position
-							if(VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lStartPosition, &m_ulErrorCode))
+							if(VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lStartPosition, &m_ulErrorCode)
+								&& VCS_GetPositionIs(m_KeyHandle, m_usNodeId2, &m_lStartPosition2, &m_ulErrorCode))
 							{
 
 								return TRUE;
@@ -62,7 +78,8 @@ BOOL IRIScontrol::OpenDevice()
 				}
 			}
 		}
-		MessageBox(NULL,(LPCWSTR)L"Test Message",(LPCWSTR)L"Test Message Window",MB_CANCELTRYCONTINUE);
+		ShowErrorInformation(m_ulErrorCode);
+		MessageBox(NULL,(LPCWSTR)L"Cannot open device!",(LPCWSTR)L"System Error",MB_OK);
 	}
 	return FALSE;
 }
@@ -119,15 +136,28 @@ void IRIScontrol::OnButtonEnable()
         }
     }
 
-    if(!VCS_SetEnableState(m_KeyHandle, m_usNodeId, &m_ulErrorCode))
+    if(!VCS_SetEnableState(m_KeyHandle, m_usNodeId, &m_ulErrorCode) 
+		|| !VCS_SetEnableState(m_KeyHandle, m_usNodeId2, &m_ulErrorCode))
     {
         ShowErrorInformation(m_ulErrorCode);
+		return;
     }
 
 	MessageBox(NULL,(LPCWSTR)L"Successfully enabled!",(LPCWSTR)L"System Message",MB_OK);
 	ui.pBtnDisable->setEnabled(TRUE);
 	timer->start(100);
 	m_oUpdateActive = TRUE;
+}
+
+void IRIScontrol::OnButtonDisable()
+{
+    UpdateNodeIdString();
+
+    if(!VCS_SetDisableState(m_KeyHandle, m_usNodeId, &m_ulErrorCode)
+		&& !VCS_SetDisableState(m_KeyHandle, m_usNodeId2, &m_ulErrorCode))
+    {
+        ShowErrorInformation(m_ulErrorCode);
+    }
 }
 
 void IRIScontrol::UpdateNodeIdString()
@@ -144,9 +174,11 @@ void IRIScontrol::OnButtonMove()
 {
     UpdateNodeIdString();
 
-    if(VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lStartPosition, &m_ulErrorCode))
+    if(VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lStartPosition, &m_ulErrorCode)
+		&& VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lStartPosition2, &m_ulErrorCode))
     {
-        if(!VCS_MoveToPosition(m_KeyHandle, m_usNodeId, m_lTargetPosition, m_oRadio, m_oImmediately, &m_ulErrorCode))
+		if(!VCS_MoveToPosition(m_KeyHandle, m_usNodeId, m_lTargetPosition, m_oRadio, m_oImmediately, &m_ulErrorCode) 
+			&& !VCS_MoveToPosition(m_KeyHandle, m_usNodeId2, m_lTargetPosition2, m_oRadio, m_oImmediately, &m_ulErrorCode))
         {
             ShowErrorInformation(m_ulErrorCode);
         }
@@ -169,6 +201,9 @@ BOOL IRIScontrol::UpdateStatus()
 {
     BOOL oEnable = TRUE;
     BOOL oResult = m_oUpdateActive;
+	BOOL oResult2 = m_oUpdateActive;
+	BOOL oResult3 = m_oUpdateActive;
+	BOOL oResult4 = m_oUpdateActive;
 
     //if(m_oRadio == 0)
     //{
@@ -249,6 +284,8 @@ BOOL IRIScontrol::UpdateStatus()
     {
         oResult = VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lActualValue, &m_ulErrorCode); 
 		ui.eTruePosition->setText(QString::number(m_lActualValue));
+		oResult2 = VCS_GetPositionIs(m_KeyHandle, m_usNodeId2, &m_lActualValue, &m_ulErrorCode); 
+		ui.eTruePosition2->setText(QString::number(m_lActualValue));
         if(!oResult)
         {
 			timer->stop();
@@ -256,12 +293,14 @@ BOOL IRIScontrol::UpdateStatus()
 
             m_lActualValue = 0;
             m_lStartPosition = 0;
+			m_lStartPosition2 = 0;
         }
     }
     else
     {
         m_lActualValue = 0;
         m_lStartPosition = 0;
+		m_lStartPosition2 = 0;
     }
 
     //if(m_hWnd) UpdateData(false);
@@ -274,4 +313,9 @@ BOOL IRIScontrol::UpdateStatus()
 void IRIScontrol::UpdateTargetPositionText(QString text)
 {
 	m_lTargetPosition = text.toLong();
+}
+
+void IRIScontrol::UpdateTargetPositionText2(QString text)
+{
+	m_lTargetPosition2 = text.toLong();
 }

@@ -18,7 +18,9 @@ public:
 
 	long    m_lActualValue;
 	long    m_lStartPosition;
+	long    m_lStartPosition2;
 	long    m_lTargetPosition;
+	long    m_lTargetPosition2;
 	CString m_strNodeId;
 	int     m_oRadio;
 	QTimer *timer;
@@ -31,6 +33,9 @@ private:
 	Ui::IRIScontrolClass ui;
 	HANDLE m_KeyHandle;
 	WORD m_usNodeId;
+	WORD m_usNodeId2;
+	WORD m_usNodeId3;
+	WORD m_usNodeId4;
 	__int8 m_bMode;
 	DWORD m_ulProfileVelocity;
 	DWORD m_ulProfileAcceleration;
@@ -44,10 +49,12 @@ private:
 
 public slots:
 	void OnButtonEnable();
+	void OnButtonDisable();
 	void OnButtonMove();
 	void OnRadioRelative();
 	void OnRadioAbsolute();
 	void UpdateTargetPositionText(QString text);
+	void UpdateTargetPositionText2(QString text);
 	BOOL UpdateStatus();
 
 };
