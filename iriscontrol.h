@@ -17,7 +17,9 @@ public:
 	~IRIScontrol();
 
 	long    m_lActualValue;
+	long    m_lActualValue2;
 	long    m_lStartPosition;
+	long    m_lStartPosition2;
 	long    m_lTargetPosition;
 	long    m_lTargetPosition2;
 	CString m_strNodeId;
@@ -32,6 +34,7 @@ private:
 	Ui::IRIScontrolClass ui;
 	HANDLE m_KeyHandle;
 	WORD m_usNodeId;
+	WORD m_usNodeId2;
 	__int8 m_bMode;
 	DWORD m_ulProfileVelocity;
 	DWORD m_ulProfileAcceleration;
@@ -45,6 +48,7 @@ private:
 
 public slots:
 	void OnButtonEnable();
+	void OnButtonDisable();
 	void OnButtonMove();
 	void OnRadioRelative();
 	void OnRadioAbsolute();
