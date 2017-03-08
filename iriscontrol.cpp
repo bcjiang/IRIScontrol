@@ -6,10 +6,12 @@ IRIScontrol::IRIScontrol(QWidget *parent, Qt::WFlags flags)
 	, m_oRadio(0)
 	, m_lStartPosition(0)
 	, m_lTargetPosition(2000)
+	, m_lTargetPosition2(2000)
 {
 	ui.setupUi(this);
 	connect(ui.pBtnEnable,SIGNAL(clicked()),this,SLOT(OnButtonEnable()));
 	connect(ui.eTargetPosition,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText(QString)));
+	connect(ui.eTargetPosition2,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText2(QString)));
 	connect(ui.pBtnMove,SIGNAL(clicked()),this,SLOT(OnButtonMove()));
 	connect(ui.rBtnRelative,SIGNAL(clicked()),this,SLOT(OnRadioRelative()));
 	connect(ui.rBtnAbsolute,SIGNAL(clicked()),this,SLOT(OnRadioAbsolute()));
@@ -274,4 +276,9 @@ BOOL IRIScontrol::UpdateStatus()
 void IRIScontrol::UpdateTargetPositionText(QString text)
 {
 	m_lTargetPosition = text.toLong();
+}
+
+void IRIScontrol::UpdateTargetPositionText2(QString text)
+{
+	m_lTargetPosition2 = text.toLong();
 }

@@ -19,6 +19,7 @@ public:
 	long    m_lActualValue;
 	long    m_lStartPosition;
 	long    m_lTargetPosition;
+	long    m_lTargetPosition2;
 	CString m_strNodeId;
 	int     m_oRadio;
 	QTimer *timer;
@@ -48,6 +49,7 @@ public slots:
 	void OnRadioRelative();
 	void OnRadioAbsolute();
 	void UpdateTargetPositionText(QString text);
+	void UpdateTargetPositionText2(QString text);
 	BOOL UpdateStatus();
 
 };
