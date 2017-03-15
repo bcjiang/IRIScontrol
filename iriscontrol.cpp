@@ -32,7 +32,7 @@ BOOL IRIScontrol::OpenDevice()
 	m_oImmediately = TRUE;
 	m_oUpdateActive = FALSE;
 	m_usNodeId = 1;
-	m_usNodeId2 = 3;
+	m_usNodeId2 = 2;
 
 	HANDLE hNewKeyHandle;
 
@@ -58,8 +58,8 @@ BOOL IRIScontrol::OpenDevice()
 						&& VCS_SetOperationMode(m_KeyHandle, m_usNodeId2, OMD_PROFILE_POSITION_MODE, &m_ulErrorCode))
 					{
 						//Write Profile Position Objects
-						if(VCS_SetPositionProfile(m_KeyHandle, m_usNodeId, 100, 1000, 1000, &m_ulErrorCode)
-							&& VCS_SetPositionProfile(m_KeyHandle, m_usNodeId2, 100, 1000, 1000, &m_ulErrorCode))
+						if(VCS_SetPositionProfile(m_KeyHandle, m_usNodeId, 1000, 10000, 10000, &m_ulErrorCode)
+							&& VCS_SetPositionProfile(m_KeyHandle, m_usNodeId2, 1000, 10000, 10000, &m_ulErrorCode))
 						{
 							//Read Actual Position
 							if(VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lStartPosition, &m_ulErrorCode)
@@ -150,8 +150,8 @@ void IRIScontrol::OnButtonDisable()
 {
     UpdateNodeIdString();
 
-    if(!VCS_SetDisableState(m_KeyHandle, m_usNodeId, &m_ulErrorCode)
-		&& !VCS_SetDisableState(m_KeyHandle, m_usNodeId2, &m_ulErrorCode))
+    if(VCS_SetDisableState(m_KeyHandle, m_usNodeId, &m_ulErrorCode)
+		&& VCS_SetDisableState(m_KeyHandle, m_usNodeId2, &m_ulErrorCode))
     {
         ShowErrorInformation(m_ulErrorCode);
     }
