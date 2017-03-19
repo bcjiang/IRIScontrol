@@ -1,4 +1,7 @@
 #include "iriscontrol.h"
+#include <math.h>
+
+#define PI 3.14159265
 
 IRIScontrol::IRIScontrol(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags)
@@ -8,15 +11,19 @@ IRIScontrol::IRIScontrol(QWidget *parent, Qt::WFlags flags)
 	, m_lStartPosition2(0)
 	, m_lTargetPosition(2000)
 	, m_lTargetPosition2(2000)
+	, m_lTargetPoseRoll(0)
 {
 	ui.setupUi(this);
 	connect(ui.pBtnEnable,SIGNAL(clicked()),this,SLOT(OnButtonEnable()));
 	connect(ui.pBtnDisable,SIGNAL(clicked()),this,SLOT(OnButtonDisable()));
 	connect(ui.eTargetPosition,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText(QString)));
 	connect(ui.eTargetPosition2,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText2(QString)));
+	connect(ui.eTargetRoll,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetRollText(QString)));
 	connect(ui.pBtnMove,SIGNAL(clicked()),this,SLOT(OnButtonMove()));
+	connect(ui.pBtnMoveToPose,SIGNAL(clicked()),this,SLOT(OnButtonMoveToPose()));
 	connect(ui.rBtnRelative,SIGNAL(clicked()),this,SLOT(OnRadioRelative()));
 	connect(ui.rBtnAbsolute,SIGNAL(clicked()),this,SLOT(OnRadioAbsolute()));
+
 	timer = new QTimer(this);
 	connect(timer,SIGNAL(timeout()),this,SLOT(UpdateStatus()));
 	
@@ -190,6 +197,36 @@ void IRIScontrol::OnButtonMove()
     UpdateStatus();
 }
 
+void IRIScontrol::OnButtonMoveToPose()  
+{
+    UpdateNodeIdString();
+
+	// This part convert target pose into target motor rotation angles (qc)
+    m_lTargetPosition = 983040 * (0.8268 - cos(0.5974 - (m_lTargetPoseRoll * PI / 180)/24));
+	m_lTargetPosition2 = 983040 * (0.8268 - cos(0.5974 + (m_lTargetPoseRoll * PI / 180)/24));
+
+	//-----------------------------------------------------------------
+
+    if(VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lStartPosition, &m_ulErrorCode))
+    {
+        if(!VCS_MoveToPosition(m_KeyHandle, m_usNodeId, m_lTargetPosition, 1, m_oImmediately, &m_ulErrorCode))
+        {
+            ShowErrorInformation(m_ulErrorCode);
+        }
+    }
+
+	if(VCS_GetPositionIs(m_KeyHandle, m_usNodeId2, &m_lStartPosition2, &m_ulErrorCode))
+    {
+        if(!VCS_MoveToPosition(m_KeyHandle, m_usNodeId2, m_lTargetPosition2, 1, m_oImmediately, &m_ulErrorCode))
+        {
+            ShowErrorInformation(m_ulErrorCode);
+        }
+    }
+
+    UpdateStatus();
+}
+
+
 void IRIScontrol::OnRadioRelative()
 {
 	m_oRadio = 0;
@@ -326,4 +363,9 @@ void IRIScontrol::UpdateTargetPositionText(QString text)
 void IRIScontrol::UpdateTargetPositionText2(QString text)
 {
 	m_lTargetPosition2 = text.toLong();
+}
+
+void IRIScontrol::UpdateTargetRollText(QString text)
+{
+	m_lTargetPoseRoll = text.toLong();
 }

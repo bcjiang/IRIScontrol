@@ -22,6 +22,7 @@ public:
 	long    m_lStartPosition2;
 	long    m_lTargetPosition;
 	long    m_lTargetPosition2;
+	long    m_lTargetPoseRoll;
 	CString m_strNodeId;
 	int     m_oRadio;
 	QTimer *timer;
@@ -50,10 +51,12 @@ public slots:
 	void OnButtonEnable();
 	void OnButtonDisable();
 	void OnButtonMove();
+	void OnButtonMoveToPose();
 	void OnRadioRelative();
 	void OnRadioAbsolute();
 	void UpdateTargetPositionText(QString text);
 	void UpdateTargetPositionText2(QString text);
+	void UpdateTargetRollText(QString);
 	BOOL UpdateStatus();
 
 };
