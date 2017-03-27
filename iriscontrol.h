@@ -7,6 +7,9 @@
 #include "Definitions.h"
 #include <atlstr.h>
 #include <QTimer>
+#include <HD/hd.h>
+#include <HDU/hduError.h>
+#include <HDU/hduVector.h>
 
 class IRIScontrol : public QMainWindow
 {
@@ -23,6 +26,7 @@ public:
 	long    m_lTargetPosition;
 	long    m_lTargetPosition2;
 	long    m_lTargetPoseRoll;
+	hduVector3Dd m_lGimbalJointPosition;
 	CString m_strNodeId;
 	int     m_oRadio;
 	QTimer *timer;
@@ -44,12 +48,14 @@ private:
 	BOOL m_oUpdateActive;
 	BOOL m_oInitialisation;
 	BOOL m_oImmediately;
+	BOOL m_oTeleopActive;
 
 	BOOL ShowErrorInformation(DWORD p_ulErrorCode);
 
 public slots:
 	void OnButtonEnable();
 	void OnButtonDisable();
+	void OnButtonEnableTeleop();
 	void OnButtonMove();
 	void OnButtonMoveToPose();
 	void OnRadioRelative();

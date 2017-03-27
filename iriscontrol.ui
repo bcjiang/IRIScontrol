@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>606</width>
-    <height>388</height>
+    <height>397</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -133,8 +133,8 @@ background: white;
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>270</y>
-      <width>441</width>
+      <y>280</y>
+      <width>531</width>
       <height>16</height>
      </rect>
     </property>
@@ -146,7 +146,7 @@ background: white;
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>300</y>
+      <y>310</y>
       <width>121</width>
       <height>27</height>
      </rect>
@@ -162,7 +162,7 @@ background: white;
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>300</y>
+      <y>310</y>
       <width>113</width>
       <height>33</height>
      </rect>
@@ -172,7 +172,7 @@ background: white;
     <property name="geometry">
      <rect>
       <x>270</x>
-      <y>300</y>
+      <y>310</y>
       <width>21</width>
       <height>27</height>
      </rect>
@@ -198,7 +198,7 @@ background: white;
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>340</y>
+      <y>350</y>
       <width>46</width>
       <height>13</height>
      </rect>
@@ -221,7 +221,7 @@ background: white;
     <property name="geometry">
      <rect>
       <x>320</x>
-      <y>300</y>
+      <y>310</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -231,7 +231,7 @@ background: white;
     <property name="geometry">
      <rect>
       <x>450</x>
-      <y>90</y>
+      <y>80</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -241,7 +241,7 @@ background: white;
     <property name="geometry">
      <rect>
       <x>450</x>
-      <y>60</y>
+      <y>50</y>
       <width>121</width>
       <height>16</height>
      </rect>
@@ -254,7 +254,7 @@ background: white;
     <property name="geometry">
      <rect>
       <x>450</x>
-      <y>130</y>
+      <y>120</y>
       <width>111</width>
       <height>16</height>
      </rect>
@@ -274,6 +274,94 @@ background: white;
     </property>
     <property name="text">
      <string>Move to Pose</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pBtnEnableTeleop">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>150</y>
+      <width>121</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Enable Teleoperation</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="eMasterPosition">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>230</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>200</y>
+      <width>141</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Phantom Omni Angle: (deg)</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>150</y>
+      <width>41</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Node2</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>140</y>
+      <width>31</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>qc</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_13">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>350</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Node2</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_14">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>320</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>qc</string>
     </property>
    </widget>
   </widget>

@@ -12,10 +12,12 @@ IRIScontrol::IRIScontrol(QWidget *parent, Qt::WFlags flags)
 	, m_lTargetPosition(2000)
 	, m_lTargetPosition2(2000)
 	, m_lTargetPoseRoll(0)
+	, m_lGimbalJointPosition(0.0,0.0,0.0)
 {
 	ui.setupUi(this);
 	connect(ui.pBtnEnable,SIGNAL(clicked()),this,SLOT(OnButtonEnable()));
 	connect(ui.pBtnDisable,SIGNAL(clicked()),this,SLOT(OnButtonDisable()));
+	connect(ui.pBtnEnableTeleop,SIGNAL(clicked()),this,SLOT(OnButtonEnableTeleop()));
 	connect(ui.eTargetPosition,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText(QString)));
 	connect(ui.eTargetPosition2,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText2(QString)));
 	connect(ui.eTargetRoll,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetRollText(QString)));
@@ -38,6 +40,7 @@ BOOL IRIScontrol::OpenDevice()
 {
 	m_oImmediately = TRUE;
 	m_oUpdateActive = FALSE;
+	m_oTeleopActive = FALSE;
 	m_usNodeId = 1;
 	m_usNodeId2 = 2;
 
@@ -151,6 +154,11 @@ void IRIScontrol::OnButtonEnable()
 	ui.pBtnDisable->setEnabled(TRUE);
 	timer->start(100);
 	m_oUpdateActive = TRUE;
+
+	// Enable Phantom Omni device
+	HHD hHD;
+	hHD = hdInitDevice(HD_DEFAULT_DEVICE);
+	hdStartScheduler();
 }
 
 void IRIScontrol::OnButtonDisable()
@@ -162,6 +170,12 @@ void IRIScontrol::OnButtonDisable()
     {
         ShowErrorInformation(m_ulErrorCode);
     }
+}
+
+void IRIScontrol::OnButtonEnableTeleop()
+{
+	if(m_oTeleopActive == FALSE){m_oTeleopActive = TRUE;}
+	else{m_oTeleopActive = FALSE;}
 }
 
 void IRIScontrol::UpdateNodeIdString()
@@ -339,6 +353,18 @@ BOOL IRIScontrol::UpdateStatus()
             m_lActualValue2 = 0;
             m_lStartPosition2 = 0;
         }
+
+		if(m_oTeleopActive == TRUE){
+			//MessageBox(NULL,(LPCWSTR)L"Enabled teleoperation!",(LPCWSTR)L"System Message",MB_OK);
+			hdBeginFrame(hdGetCurrentDevice());
+			hdGetDoublev(HD_CURRENT_GIMBAL_ANGLES, m_lGimbalJointPosition);
+			hdEndFrame(hdGetCurrentDevice());
+			ui.eMasterPosition->setText(QString::number(m_lGimbalJointPosition[0]));
+		}
+		else{
+			//MessageBox(NULL,(LPCWSTR)L"Disabled teleoperation!",(LPCWSTR)L"System Message",MB_OK);
+			ui.eMasterPosition->setText(QString::number(0));
+		}
     }
     else
     {
