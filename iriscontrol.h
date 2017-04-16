@@ -21,10 +21,16 @@ public:
 
 	long    m_lActualValue;
 	long    m_lActualValue2;
+	long    m_lActualValue3;
+	long    m_lActualValue4;
 	long    m_lStartPosition;
 	long    m_lStartPosition2;
+	long    m_lStartPosition3;
+	long    m_lStartPosition4;
 	long    m_lTargetPosition;
 	long    m_lTargetPosition2;
+	long    m_lTargetPosition3;
+	long    m_lTargetPosition4;
 	long    m_lTargetPoseRoll;
 	hduVector3Dd m_lGimbalJointPosition;
 	CString m_strNodeId;
@@ -40,6 +46,8 @@ private:
 	HANDLE m_KeyHandle;
 	WORD m_usNodeId;
 	WORD m_usNodeId2;
+	WORD m_usNodeId3;
+	WORD m_usNodeId4;
 	__int8 m_bMode;
 	DWORD m_ulProfileVelocity;
 	DWORD m_ulProfileAcceleration;

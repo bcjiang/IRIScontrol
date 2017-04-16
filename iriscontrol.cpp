@@ -9,8 +9,12 @@ IRIScontrol::IRIScontrol(QWidget *parent, Qt::WFlags flags)
 	, m_oRadio(0)
 	, m_lStartPosition(0)
 	, m_lStartPosition2(0)
+	, m_lStartPosition3(0)
+	, m_lStartPosition4(0)
 	, m_lTargetPosition(2000)
 	, m_lTargetPosition2(2000)
+	, m_lTargetPosition3(2000)
+	, m_lTargetPosition4(2000)
 	, m_lTargetPoseRoll(0)
 	, m_lGimbalJointPosition(0.0,0.0,0.0)
 {
@@ -43,6 +47,8 @@ BOOL IRIScontrol::OpenDevice()
 	m_oTeleopActive = FALSE;
 	m_usNodeId = 1;
 	m_usNodeId2 = 2;
+	m_usNodeId3 = 3;
+	m_usNodeId4 = 4;
 
 	HANDLE hNewKeyHandle;
 
@@ -53,27 +59,39 @@ BOOL IRIScontrol::OpenDevice()
 
 		//Clear Error History
 		if(VCS_ClearFault(m_KeyHandle, m_usNodeId, &m_ulErrorCode)
-			&& VCS_ClearFault(m_KeyHandle, m_usNodeId2, &m_ulErrorCode))
+			&& VCS_ClearFault(m_KeyHandle, m_usNodeId2, &m_ulErrorCode)
+			&& VCS_ClearFault(m_KeyHandle, m_usNodeId3, &m_ulErrorCode)
+			&& VCS_ClearFault(m_KeyHandle, m_usNodeId4, &m_ulErrorCode))
 		{
 			//Read Operation Mode
 			if(VCS_GetOperationMode(m_KeyHandle, m_usNodeId, &m_bMode, &m_ulErrorCode)
-				&& VCS_GetOperationMode(m_KeyHandle, m_usNodeId2, &m_bMode, &m_ulErrorCode))
+				&& VCS_GetOperationMode(m_KeyHandle, m_usNodeId2, &m_bMode, &m_ulErrorCode)
+				&& VCS_GetOperationMode(m_KeyHandle, m_usNodeId3, &m_bMode, &m_ulErrorCode)
+				&& VCS_GetOperationMode(m_KeyHandle, m_usNodeId4, &m_bMode, &m_ulErrorCode))
 			{
 				//Read Position Profile Objects
 				if(VCS_GetPositionProfile(m_KeyHandle, m_usNodeId, &m_ulProfileVelocity, &m_ulProfileAcceleration, &m_ulProfileDeceleration, &m_ulErrorCode)
-					&& VCS_GetPositionProfile(m_KeyHandle, m_usNodeId2, &m_ulProfileVelocity, &m_ulProfileAcceleration, &m_ulProfileDeceleration, &m_ulErrorCode))
+					&& VCS_GetPositionProfile(m_KeyHandle, m_usNodeId2, &m_ulProfileVelocity, &m_ulProfileAcceleration, &m_ulProfileDeceleration, &m_ulErrorCode)
+					&& VCS_GetPositionProfile(m_KeyHandle, m_usNodeId3, &m_ulProfileVelocity, &m_ulProfileAcceleration, &m_ulProfileDeceleration, &m_ulErrorCode)
+					&& VCS_GetPositionProfile(m_KeyHandle, m_usNodeId4, &m_ulProfileVelocity, &m_ulProfileAcceleration, &m_ulProfileDeceleration, &m_ulErrorCode))
 				{
 					//Write Profile Position Mode
 					if(VCS_SetOperationMode(m_KeyHandle, m_usNodeId, OMD_PROFILE_POSITION_MODE, &m_ulErrorCode)
-						&& VCS_SetOperationMode(m_KeyHandle, m_usNodeId2, OMD_PROFILE_POSITION_MODE, &m_ulErrorCode))
+						&& VCS_SetOperationMode(m_KeyHandle, m_usNodeId2, OMD_PROFILE_POSITION_MODE, &m_ulErrorCode)
+						&& VCS_SetOperationMode(m_KeyHandle, m_usNodeId3, OMD_PROFILE_POSITION_MODE, &m_ulErrorCode)
+						&& VCS_SetOperationMode(m_KeyHandle, m_usNodeId4, OMD_PROFILE_POSITION_MODE, &m_ulErrorCode))
 					{
 						//Write Profile Position Objects
 						if(VCS_SetPositionProfile(m_KeyHandle, m_usNodeId, 1000, 10000, 10000, &m_ulErrorCode)
-							&& VCS_SetPositionProfile(m_KeyHandle, m_usNodeId2, 1000, 10000, 10000, &m_ulErrorCode))
+							&& VCS_SetPositionProfile(m_KeyHandle, m_usNodeId2, 1000, 10000, 10000, &m_ulErrorCode)
+							&& VCS_SetPositionProfile(m_KeyHandle, m_usNodeId3, 1000, 10000, 10000, &m_ulErrorCode)
+							&& VCS_SetPositionProfile(m_KeyHandle, m_usNodeId4, 1000, 10000, 10000, &m_ulErrorCode))
 						{
 							//Read Actual Position
 							if(VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lStartPosition, &m_ulErrorCode)
-								&& VCS_GetPositionIs(m_KeyHandle, m_usNodeId2, &m_lStartPosition2, &m_ulErrorCode))
+								&& VCS_GetPositionIs(m_KeyHandle, m_usNodeId2, &m_lStartPosition2, &m_ulErrorCode)
+								&& VCS_GetPositionIs(m_KeyHandle, m_usNodeId3, &m_lStartPosition3, &m_ulErrorCode)
+								&& VCS_GetPositionIs(m_KeyHandle, m_usNodeId4, &m_lStartPosition4, &m_ulErrorCode))
 							{
 
 								return TRUE;
@@ -127,7 +145,9 @@ void IRIScontrol::OnButtonEnable()
     UpdateNodeIdString();
 
     if(!VCS_GetFaultState(m_KeyHandle, m_usNodeId, &oFault, &m_ulErrorCode)
-		|| !VCS_GetFaultState(m_KeyHandle, m_usNodeId2, &oFault, &m_ulErrorCode))
+		|| !VCS_GetFaultState(m_KeyHandle, m_usNodeId2, &oFault, &m_ulErrorCode)
+		|| !VCS_GetFaultState(m_KeyHandle, m_usNodeId3, &oFault, &m_ulErrorCode)
+		|| !VCS_GetFaultState(m_KeyHandle, m_usNodeId4, &oFault, &m_ulErrorCode))
     {
         ShowErrorInformation(m_ulErrorCode);
         return;
@@ -136,7 +156,9 @@ void IRIScontrol::OnButtonEnable()
     if(oFault)
     {
         if(!VCS_ClearFault(m_KeyHandle, m_usNodeId, &m_ulErrorCode)
-			|| !VCS_ClearFault(m_KeyHandle, m_usNodeId2, &m_ulErrorCode))
+			|| !VCS_ClearFault(m_KeyHandle, m_usNodeId2, &m_ulErrorCode)
+			|| !VCS_ClearFault(m_KeyHandle, m_usNodeId3, &m_ulErrorCode)
+			|| !VCS_ClearFault(m_KeyHandle, m_usNodeId4, &m_ulErrorCode))
         {
             ShowErrorInformation(m_ulErrorCode);
             return;
@@ -144,7 +166,9 @@ void IRIScontrol::OnButtonEnable()
     }
 
     if(!VCS_SetEnableState(m_KeyHandle, m_usNodeId, &m_ulErrorCode)
-		|| !VCS_SetEnableState(m_KeyHandle, m_usNodeId2, &m_ulErrorCode))
+		|| !VCS_SetEnableState(m_KeyHandle, m_usNodeId2, &m_ulErrorCode)
+		|| !VCS_SetEnableState(m_KeyHandle, m_usNodeId3, &m_ulErrorCode)
+		|| !VCS_SetEnableState(m_KeyHandle, m_usNodeId4, &m_ulErrorCode))
     {
         ShowErrorInformation(m_ulErrorCode);
 		return;
@@ -165,11 +189,16 @@ void IRIScontrol::OnButtonDisable()
 {
     UpdateNodeIdString();
 
-    if(VCS_SetDisableState(m_KeyHandle, m_usNodeId, &m_ulErrorCode)
-		&& VCS_SetDisableState(m_KeyHandle, m_usNodeId2, &m_ulErrorCode))
+    if(!VCS_SetDisableState(m_KeyHandle, m_usNodeId, &m_ulErrorCode)
+		|| !VCS_SetDisableState(m_KeyHandle, m_usNodeId2, &m_ulErrorCode)
+		|| !VCS_SetDisableState(m_KeyHandle, m_usNodeId3, &m_ulErrorCode)
+		|| !VCS_SetDisableState(m_KeyHandle, m_usNodeId4, &m_ulErrorCode))
     {
         ShowErrorInformation(m_ulErrorCode);
     }
+
+	MessageBox(NULL,(LPCWSTR)L"Controllers disabled!",(LPCWSTR)L"System Message",MB_OK);
+	ui.pBtnDisable->setEnabled(FALSE);
 }
 
 void IRIScontrol::OnButtonEnableTeleop()
@@ -208,6 +237,22 @@ void IRIScontrol::OnButtonMove()
         }
     }
 
+	if(VCS_GetPositionIs(m_KeyHandle, m_usNodeId3, &m_lStartPosition3, &m_ulErrorCode))
+    {
+        if(!VCS_MoveToPosition(m_KeyHandle, m_usNodeId3, m_lTargetPosition3, m_oRadio, m_oImmediately, &m_ulErrorCode))
+        {
+            ShowErrorInformation(m_ulErrorCode);
+        }
+    }
+
+	if(VCS_GetPositionIs(m_KeyHandle, m_usNodeId4, &m_lStartPosition4, &m_ulErrorCode))
+    {
+        if(!VCS_MoveToPosition(m_KeyHandle, m_usNodeId4, m_lTargetPosition4, m_oRadio, m_oImmediately, &m_ulErrorCode))
+        {
+            ShowErrorInformation(m_ulErrorCode);
+        }
+    }
+
     UpdateStatus();
 }
 
@@ -216,9 +261,16 @@ void IRIScontrol::OnButtonMoveToPose()
     UpdateNodeIdString();
 
 	// This part convert target pose into target motor rotation angles (qc)
-    m_lTargetPosition = 983040 * (0.8268 - cos(0.5974 - (m_lTargetPoseRoll * PI / 180)/24));
-	m_lTargetPosition2 = 983040 * (0.8268 - cos(0.5974 + (m_lTargetPoseRoll * PI / 180)/24));
-
+    //m_lTargetPosition = 983040 * (0.8268 - cos(0.5974 - (m_lTargetPoseRoll * PI / 180)/24));
+	//m_lTargetPosition2 = 983040 * (0.8268 - cos(0.5974 + (m_lTargetPoseRoll * PI / 180)/24));
+	if(m_lTargetPoseRoll >= 0){
+	m_lTargetPosition = -1.778 * pow((double)m_lTargetPoseRoll,3) + 28.1 * pow((double)m_lTargetPoseRoll,2) + 5018 * m_lTargetPoseRoll;
+	m_lTargetPosition2 = - m_lTargetPosition / 2;
+	}
+	else {
+		m_lTargetPosition2 = -1.778 * pow((double)m_lTargetPoseRoll,3) + 28.1 * pow((double)m_lTargetPoseRoll,2) + 5018 * m_lTargetPoseRoll;
+		m_lTargetPosition = - m_lTargetPosition2 / 2;
+	}
 	//-----------------------------------------------------------------
 
     if(VCS_GetPositionIs(m_KeyHandle, m_usNodeId, &m_lStartPosition, &m_ulErrorCode))
@@ -256,80 +308,6 @@ BOOL IRIScontrol::UpdateStatus()
     BOOL oEnable = TRUE;
     BOOL oResult = m_oUpdateActive;
 
-    //if(m_oRadio == 0)
-    //{
-    //    m_Move.SetWindowText("&Move Relative");
-    //}
-    //else
-    //{
-    //    m_Move.SetWindowText("&Move Absolute");
-    //}
-
-    //if(oResult)
-    //{
-    //    oResult = VCS_GetOperationMode(m_KeyHandle, m_usNodeId, &m_bMode, &m_ulErrorCode);
-    //    if(oResult)
-    //    {
-    //        switch(m_bMode)
-    //        {
-    //            case -6: m_strActiveMode = "Step/Direction Mode"; break;
-    //            case -5: m_strActiveMode = "Master Encoder Mode"; break;
-    //            case -3: m_strActiveMode = "Current Mode"; break;
-    //            case -2: m_strActiveMode = "Velocity Mode"; break;
-    //            case -1: m_strActiveMode = "Position Mode"; break;
-    //            case 1: m_strActiveMode = "Profile Position Mode"; break;
-    //            case 3: m_strActiveMode = "Profile Velocity Mode"; break;
-    //            case 6: m_strActiveMode = "Homing Mode"; break;
-    //            case 7: m_strActiveMode = "Interpolated Position Mode"; break;
-    //            default: m_strActiveMode = "Unknown Mode";
-    //        }
-    //    }
-    //    else
-    //    {
-    //        StopTimer();
-    //        ShowErrorInformation(m_ulErrorCode);
-
-    //        m_strActiveMode = "Unknown Mode";
-    //    }
-    //}
-    //else
-    //{
-    //    m_strActiveMode = "Unknown Mode";
-    //}
-
-    //if(oResult)
-    //{
-    //    oResult = VCS_GetEnableState(m_KeyHandle, m_usNodeId, &oEnable, &m_ulErrorCode);
-
-    //    if(oResult)
-    //    {
-    //        m_DeviceSettings.EnableWindow(!oEnable);
-    //        m_Enable.EnableWindow(!oEnable);
-    //        m_Disable.EnableWindow(oEnable);
-    //        m_Move.EnableWindow(oEnable);
-    //        m_Halt.EnableWindow(oEnable);
-    //    }
-    //    else
-    //    {
-    //        StopTimer();
-    //        ShowErrorInformation(m_ulErrorCode);
-
-    //        m_DeviceSettings.EnableWindow(oEnable);
-    //        m_Enable.EnableWindow(oEnable);
-    //        m_Disable.EnableWindow(!oEnable);
-    //        m_Move.EnableWindow(!oEnable);
-    //        m_Halt.EnableWindow(!oEnable);
-    //    }
-    //}
-    //else
-    //{
-    //    m_DeviceSettings.EnableWindow(oEnable);
-    //    m_Enable.EnableWindow(!oEnable);
-    //    m_Disable.EnableWindow(!oEnable);
-    //    m_Move.EnableWindow(!oEnable);
-    //    m_Halt.EnableWindow(!oEnable);
-    //}
-
 	// Update the Current Position
     if(oResult)
     {
@@ -353,6 +331,26 @@ BOOL IRIScontrol::UpdateStatus()
             m_lActualValue2 = 0;
             m_lStartPosition2 = 0;
         }
+        oResult = VCS_GetPositionIs(m_KeyHandle, m_usNodeId3, &m_lActualValue3, &m_ulErrorCode); 
+		ui.eTruePosition3->setText(QString::number(m_lActualValue3));
+        if(!oResult)
+        {
+			timer->stop();
+            ShowErrorInformation(m_ulErrorCode);
+
+            m_lActualValue3 = 0;
+            m_lStartPosition3 = 0;
+        }
+        oResult = VCS_GetPositionIs(m_KeyHandle, m_usNodeId4, &m_lActualValue4, &m_ulErrorCode); 
+		ui.eTruePosition4->setText(QString::number(m_lActualValue4));
+        if(!oResult)
+        {
+			timer->stop();
+            ShowErrorInformation(m_ulErrorCode);
+
+            m_lActualValue4 = 0;
+            m_lStartPosition4 = 0;
+        }
 
 		if(m_oTeleopActive == TRUE){
 			//MessageBox(NULL,(LPCWSTR)L"Enabled teleoperation!",(LPCWSTR)L"System Message",MB_OK);
@@ -360,6 +358,25 @@ BOOL IRIScontrol::UpdateStatus()
 			hdGetDoublev(HD_CURRENT_GIMBAL_ANGLES, m_lGimbalJointPosition);
 			hdEndFrame(hdGetCurrentDevice());
 			ui.eMasterPosition->setText(QString::number(m_lGimbalJointPosition[0]));
+			m_lTargetPoseRoll = (m_lGimbalJointPosition[0] + 0.15)/0.5 * 30;
+			
+			if(m_lTargetPoseRoll >= 0){
+			m_lTargetPosition = -1.778 * pow((double)m_lTargetPoseRoll,3) + 28.1 * pow((double)m_lTargetPoseRoll,2) + 5018 * m_lTargetPoseRoll;
+			m_lTargetPosition2 = - m_lTargetPosition / 2;
+			}
+			else {
+			m_lTargetPosition2 = -1.778 * pow((double)m_lTargetPoseRoll,3) + 28.1 * pow((double)m_lTargetPoseRoll,2) + 5018 * m_lTargetPoseRoll;
+			m_lTargetPosition = - m_lTargetPosition2 / 2;
+			}
+			if(!VCS_MoveToPosition(m_KeyHandle, m_usNodeId, m_lTargetPosition, 1, m_oImmediately, &m_ulErrorCode))
+			{
+            ShowErrorInformation(m_ulErrorCode);
+			}
+
+			if(!VCS_MoveToPosition(m_KeyHandle, m_usNodeId2, m_lTargetPosition2, 1, m_oImmediately, &m_ulErrorCode))
+			{
+            ShowErrorInformation(m_ulErrorCode);
+			}
 		}
 		else{
 			//MessageBox(NULL,(LPCWSTR)L"Disabled teleoperation!",(LPCWSTR)L"System Message",MB_OK);
@@ -370,8 +387,12 @@ BOOL IRIScontrol::UpdateStatus()
     {
         m_lActualValue = 0;
 		m_lActualValue2 = 0;
+		m_lActualValue3 = 0;
+		m_lActualValue4 = 0;
         m_lStartPosition = 0;
 		m_lStartPosition2 = 0;
+		m_lStartPosition3 = 0;
+		m_lStartPosition4 = 0;
     }
 
     //if(m_hWnd) UpdateData(false);
