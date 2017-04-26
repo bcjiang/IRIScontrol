@@ -22,7 +22,7 @@ static const uint qt_meta_data_IRIScontrol[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -39,8 +39,10 @@ static const uint qt_meta_data_IRIScontrol[] = {
      125,   12,   12,   12, 0x0a,
      148,  143,   12,   12, 0x0a,
      182,  143,   12,   12, 0x0a,
-     217,   12,   12,   12, 0x0a,
-     252,   12,  247,   12, 0x0a,
+     217,  143,   12,   12, 0x0a,
+     252,  143,   12,   12, 0x0a,
+     287,   12,   12,   12, 0x0a,
+     322,   12,  317,   12, 0x0a,
 
        0        // eod
 };
@@ -52,6 +54,8 @@ static const char qt_meta_stringdata_IRIScontrol[] = {
     "OnRadioRelative()\0OnRadioAbsolute()\0"
     "text\0UpdateTargetPositionText(QString)\0"
     "UpdateTargetPositionText2(QString)\0"
+    "UpdateTargetPositionText3(QString)\0"
+    "UpdateTargetPositionText4(QString)\0"
     "UpdateTargetRollText(QString)\0BOOL\0"
     "UpdateStatus()\0"
 };
@@ -71,8 +75,10 @@ void IRIScontrol::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 6: _t->OnRadioAbsolute(); break;
         case 7: _t->UpdateTargetPositionText((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 8: _t->UpdateTargetPositionText2((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 9: _t->UpdateTargetRollText((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 10: { BOOL _r = _t->UpdateStatus();
+        case 9: _t->UpdateTargetPositionText3((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 10: _t->UpdateTargetPositionText4((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 11: _t->UpdateTargetRollText((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 12: { BOOL _r = _t->UpdateStatus();
             if (_a[0]) *reinterpret_cast< BOOL*>(_a[0]) = _r; }  break;
         default: ;
         }
@@ -111,9 +117,9 @@ int IRIScontrol::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 13;
     }
     return _id;
 }

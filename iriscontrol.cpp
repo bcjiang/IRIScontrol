@@ -24,6 +24,8 @@ IRIScontrol::IRIScontrol(QWidget *parent, Qt::WFlags flags)
 	connect(ui.pBtnEnableTeleop,SIGNAL(clicked()),this,SLOT(OnButtonEnableTeleop()));
 	connect(ui.eTargetPosition,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText(QString)));
 	connect(ui.eTargetPosition2,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText2(QString)));
+	connect(ui.eTargetPosition3,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText3(QString)));
+	connect(ui.eTargetPosition4,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetPositionText4(QString)));
 	connect(ui.eTargetRoll,SIGNAL(textChanged(QString)),this,SLOT(UpdateTargetRollText(QString)));
 	connect(ui.pBtnMove,SIGNAL(clicked()),this,SLOT(OnButtonMove()));
 	connect(ui.pBtnMoveToPose,SIGNAL(clicked()),this,SLOT(OnButtonMoveToPose()));
@@ -199,6 +201,7 @@ void IRIScontrol::OnButtonDisable()
 
 	MessageBox(NULL,(LPCWSTR)L"Controllers disabled!",(LPCWSTR)L"System Message",MB_OK);
 	ui.pBtnDisable->setEnabled(FALSE);
+	timer->stop();
 }
 
 void IRIScontrol::OnButtonEnableTeleop()
@@ -411,6 +414,17 @@ void IRIScontrol::UpdateTargetPositionText2(QString text)
 {
 	m_lTargetPosition2 = text.toLong();
 }
+
+void IRIScontrol::UpdateTargetPositionText3(QString text)
+{
+	m_lTargetPosition3 = text.toLong();
+}
+
+void IRIScontrol::UpdateTargetPositionText4(QString text)
+{
+	m_lTargetPosition4 = text.toLong();
+}
+
 
 void IRIScontrol::UpdateTargetRollText(QString text)
 {

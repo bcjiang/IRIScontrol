@@ -70,6 +70,8 @@ public slots:
 	void OnRadioAbsolute();
 	void UpdateTargetPositionText(QString text);
 	void UpdateTargetPositionText2(QString text);
+	void UpdateTargetPositionText3(QString text);
+	void UpdateTargetPositionText4(QString text);
 	void UpdateTargetRollText(QString);
 	BOOL UpdateStatus();
 
