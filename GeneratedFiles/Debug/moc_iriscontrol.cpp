@@ -40,9 +40,9 @@ static const uint qt_meta_data_IRIScontrol[] = {
      148,  143,   12,   12, 0x0a,
      182,  143,   12,   12, 0x0a,
      217,  143,   12,   12, 0x0a,
-     252,  143,   12,   12, 0x0a,
-     287,   12,   12,   12, 0x0a,
-     322,   12,  317,   12, 0x0a,
+     252,   12,   12,   12, 0x0a,
+     282,   12,   12,   12, 0x0a,
+     318,   12,  313,   12, 0x0a,
 
        0        // eod
 };
@@ -53,10 +53,10 @@ static const char qt_meta_stringdata_IRIScontrol[] = {
     "OnButtonMove()\0OnButtonMoveToPose()\0"
     "OnRadioRelative()\0OnRadioAbsolute()\0"
     "text\0UpdateTargetPositionText(QString)\0"
-    "UpdateTargetPositionText2(QString)\0"
     "UpdateTargetPositionText3(QString)\0"
     "UpdateTargetPositionText4(QString)\0"
-    "UpdateTargetRollText(QString)\0BOOL\0"
+    "UpdateTargetRollText(QString)\0"
+    "UpdateTargetPitchText(QString)\0BOOL\0"
     "UpdateStatus()\0"
 };
 
@@ -74,10 +74,10 @@ void IRIScontrol::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 5: _t->OnRadioRelative(); break;
         case 6: _t->OnRadioAbsolute(); break;
         case 7: _t->UpdateTargetPositionText((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 8: _t->UpdateTargetPositionText2((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 9: _t->UpdateTargetPositionText3((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 10: _t->UpdateTargetPositionText4((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 11: _t->UpdateTargetRollText((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 8: _t->UpdateTargetPositionText3((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 9: _t->UpdateTargetPositionText4((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 10: _t->UpdateTargetRollText((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 11: _t->UpdateTargetPitchText((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 12: { BOOL _r = _t->UpdateStatus();
             if (_a[0]) *reinterpret_cast< BOOL*>(_a[0]) = _r; }  break;
         default: ;
