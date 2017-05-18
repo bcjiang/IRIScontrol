@@ -68,6 +68,11 @@ public:
     QLineEdit *eTruePosition4;
     QLabel *label_20;
     QLabel *label_21;
+    QLineEdit *eTargetPitch;
+    QLabel *label_22;
+    QLineEdit *eMasterPosition2;
+    QLabel *label_23;
+    QLabel *label_24;
     QMenuBar *menuBar;
 
     void setupUi(QMainWindow *IRIScontrolClass)
@@ -138,25 +143,25 @@ public:
         eTruePosition2->setGeometry(QRect(250, 370, 81, 31));
         eTargetRoll = new QLineEdit(centralWidget);
         eTargetRoll->setObjectName(QString::fromUtf8("eTargetRoll"));
-        eTargetRoll->setGeometry(QRect(450, 80, 111, 31));
+        eTargetRoll->setGeometry(QRect(450, 60, 111, 31));
         label_6 = new QLabel(centralWidget);
         label_6->setObjectName(QString::fromUtf8("label_6"));
-        label_6->setGeometry(QRect(450, 50, 121, 16));
+        label_6->setGeometry(QRect(450, 30, 121, 16));
         label_7 = new QLabel(centralWidget);
         label_7->setObjectName(QString::fromUtf8("label_7"));
-        label_7->setGeometry(QRect(450, 120, 111, 16));
+        label_7->setGeometry(QRect(450, 100, 141, 16));
         pBtnMoveToPose = new QPushButton(centralWidget);
         pBtnMoveToPose->setObjectName(QString::fromUtf8("pBtnMoveToPose"));
         pBtnMoveToPose->setGeometry(QRect(50, 260, 151, 51));
         pBtnEnableTeleop = new QPushButton(centralWidget);
         pBtnEnableTeleop->setObjectName(QString::fromUtf8("pBtnEnableTeleop"));
-        pBtnEnableTeleop->setGeometry(QRect(450, 150, 121, 41));
+        pBtnEnableTeleop->setGeometry(QRect(450, 180, 121, 41));
         eMasterPosition = new QLineEdit(centralWidget);
         eMasterPosition->setObjectName(QString::fromUtf8("eMasterPosition"));
-        eMasterPosition->setGeometry(QRect(450, 230, 111, 31));
+        eMasterPosition->setGeometry(QRect(450, 300, 111, 31));
         label_8 = new QLabel(centralWidget);
         label_8->setObjectName(QString::fromUtf8("label_8"));
-        label_8->setGeometry(QRect(450, 200, 141, 16));
+        label_8->setGeometry(QRect(450, 230, 141, 16));
         label_10 = new QLabel(centralWidget);
         label_10->setObjectName(QString::fromUtf8("label_10"));
         label_10->setGeometry(QRect(230, 150, 41, 16));
@@ -205,6 +210,21 @@ public:
         label_21 = new QLabel(centralWidget);
         label_21->setObjectName(QString::fromUtf8("label_21"));
         label_21->setGeometry(QRect(580, 380, 21, 16));
+        eTargetPitch = new QLineEdit(centralWidget);
+        eTargetPitch->setObjectName(QString::fromUtf8("eTargetPitch"));
+        eTargetPitch->setGeometry(QRect(450, 120, 111, 31));
+        label_22 = new QLabel(centralWidget);
+        label_22->setObjectName(QString::fromUtf8("label_22"));
+        label_22->setGeometry(QRect(450, 160, 131, 16));
+        eMasterPosition2 = new QLineEdit(centralWidget);
+        eMasterPosition2->setObjectName(QString::fromUtf8("eMasterPosition2"));
+        eMasterPosition2->setGeometry(QRect(450, 260, 111, 31));
+        label_23 = new QLabel(centralWidget);
+        label_23->setObjectName(QString::fromUtf8("label_23"));
+        label_23->setGeometry(QRect(570, 310, 31, 20));
+        label_24 = new QLabel(centralWidget);
+        label_24->setObjectName(QString::fromUtf8("label_24"));
+        label_24->setGeometry(QRect(570, 270, 46, 13));
         IRIScontrolClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(IRIScontrolClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -231,7 +251,7 @@ public:
         label_5->setText(QApplication::translate("IRIScontrolClass", "Node1", 0, QApplication::UnicodeUTF8));
         label_9->setText(QApplication::translate("IRIScontrolClass", "Node1", 0, QApplication::UnicodeUTF8));
         label_6->setText(QApplication::translate("IRIScontrolClass", "Target IRIS Orientation", 0, QApplication::UnicodeUTF8));
-        label_7->setText(QApplication::translate("IRIScontrolClass", "Roll Angle (0-90 deg)", 0, QApplication::UnicodeUTF8));
+        label_7->setText(QApplication::translate("IRIScontrolClass", "Roll Angle (0~20)", 0, QApplication::UnicodeUTF8));
         pBtnMoveToPose->setText(QApplication::translate("IRIScontrolClass", "Move to Pose", 0, QApplication::UnicodeUTF8));
         pBtnEnableTeleop->setText(QApplication::translate("IRIScontrolClass", "Enable Teleoperation", 0, QApplication::UnicodeUTF8));
         label_8->setText(QApplication::translate("IRIScontrolClass", "Phantom Omni Angle: (deg)", 0, QApplication::UnicodeUTF8));
@@ -247,6 +267,9 @@ public:
         label_19->setText(QApplication::translate("IRIScontrolClass", "Node4", 0, QApplication::UnicodeUTF8));
         label_20->setText(QApplication::translate("IRIScontrolClass", "qc", 0, QApplication::UnicodeUTF8));
         label_21->setText(QApplication::translate("IRIScontrolClass", "qc", 0, QApplication::UnicodeUTF8));
+        label_22->setText(QApplication::translate("IRIScontrolClass", "Pitch Angle (-20 ~ 20 deg)", 0, QApplication::UnicodeUTF8));
+        label_23->setText(QApplication::translate("IRIScontrolClass", "Pitch", 0, QApplication::UnicodeUTF8));
+        label_24->setText(QApplication::translate("IRIScontrolClass", "Roll", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
